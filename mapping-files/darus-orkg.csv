@@ -1,0 +1,17 @@
+darus ,darusDatatype,subfields,orkgName,orkgId ,orkgDatatype,subfields
+publicationDate,string ,,datePublished,P186072,resource,"same as, description"
+title,string ,,title,P184072,resource,
+author,dictionary ,"Name, ORCID, ROR",author,P186069,resource,
+author.name,,,,P186069,,
+author.ORCID,,,,SAME_AS,literal,
+dsDescription,string ,,description,P14,resource,
+publication,string ,,citation,P45087,resource,
+grantNumber,dictionary ,"Agency, Identifier",funding,P49051,resource,
+keyword,dictionary ,,keywords,P186076,resource(Text) ,"same as, description"
+keyword.termUri,,,,SAME_AS,literal,
+keyword.value,,,,description,literal,
+producer,dictionary ,"Name, Affiliation",Producer,P45077,resource(Text) ,"same as, description"
+processMethods,dictionary ,"Name, Description, Parameter",measurementMethod,P188083,resource(Text) ,"same as, description"
+contributer,dictionary ,"Type, Name",contributor,P49016,resource(Text) ,"same as, description"
+dateOfDeposit,string ,,dateCreated,P186079,resource(Text) ,"same as, description"
+persistentUrl,string ,,identifier,P186081,url,

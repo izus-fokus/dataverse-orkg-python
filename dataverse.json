@@ -1,0 +1,598 @@
+{
+  "status": "OK",
+  "data": {
+    "id": 445529,
+    "identifier": "darus-5526",
+    "persistentUrl": "https://doi.org/10.18419/DARUS-5526",
+    "protocol": "doi",
+    "authority": "10.18419",
+    "separator": "/",
+    "publisher": "DaRUS",
+    "publicationDate": "2026-04-21",
+    "storageIdentifier": "s3://10.18419/darus-5526",
+    "datasetType": "dataset",
+    "locks": [],
+    "latestVersion": {
+      "id": 7503,
+      "datasetId": 445529,
+      "datasetPersistentId": "doi:10.18419/DARUS-5526",
+      "datasetType": "dataset",
+      "storageIdentifier": "s3://10.18419/darus-5526",
+      "versionNumber": 1,
+      "internalVersionNumber": 49,
+      "versionMinorNumber": 0,
+      "versionState": "RELEASED",
+      "latestVersionPublishingState": "RELEASED",
+      "lastUpdateTime": "2026-04-21T08:07:03Z",
+      "releaseTime": "2026-04-21T08:07:03Z",
+      "createTime": "2025-11-10T09:44:50Z",
+      "publicationDate": "2026-04-21",
+      "citationDate": "2026-04-21",
+      "license": {
+        "name": "GPL 3.0 or later",
+        "uri": "https://www.gnu.org/licenses/gpl-3.0-standalone.html"
+      },
+      "fileAccessRequest": true,
+      "metadataBlocks": {
+        "citation": {
+          "displayName": "Citation Metadata",
+          "name": "citation",
+          "fields": [
+            {
+              "typeName": "title",
+              "multiple": false,
+              "typeClass": "primitive",
+              "value": "Supplementary Material for Sum-of-Squares Stability Verification on Manifolds with Applications in Spacecraft Attitude Control"
+            },
+            {
+              "typeName": "otherId",
+              "multiple": true,
+              "typeClass": "compound",
+              "value": [
+                {
+                  "otherIdAgency": {
+                    "typeName": "otherIdAgency",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Software Heritage"
+                  },
+                  "otherIdValue": {
+                    "typeName": "otherIdValue",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "https://archive.softwareheritage.org/swh:1:dir:a5ce803c3c86e623552a996826dd9f5f8db3b9a5;origin=https://github.com/iFR-OFC/SOS-Verify-Manifold-Spacecraft;visit=swh:1:snp:4d1cba849bb06546f18e6209aea9c6d1aa292194;anchor=swh:1:rev:7be8e1531349d8228df2f06d6290d302efcfa7ca"
+                  }
+                }
+              ]
+            },
+            {
+              "typeName": "author",
+              "multiple": true,
+              "typeClass": "compound",
+              "value": [
+                {
+                  "authorName": {
+                    "typeName": "authorName",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Geyer, Fabian"
+                  },
+                  "authorAffiliation": {
+                    "typeName": "authorAffiliation",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "https://ror.org/04vnq7t77",
+                    "expandedvalue": {
+                      "scheme": "http://www.grid.ac/ontology/",
+                      "termName": "University of Stuttgart",
+                      "@type": "https://schema.org/Organization"
+                    }
+                  },
+                  "authorIdentifierScheme": {
+                    "typeName": "authorIdentifierScheme",
+                    "multiple": false,
+                    "typeClass": "controlledVocabulary",
+                    "value": "ORCID"
+                  },
+                  "authorIdentifier": {
+                    "typeName": "authorIdentifier",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "0009-0001-8967-5279"
+                  }
+                },
+                {
+                  "authorName": {
+                    "typeName": "authorName",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Tuttas, Friedrich"
+                  },
+                  "authorAffiliation": {
+                    "typeName": "authorAffiliation",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "https://ror.org/04vnq7t77",
+                    "expandedvalue": {
+                      "scheme": "http://www.grid.ac/ontology/",
+                      "termName": "University of Stuttgart",
+                      "@type": "https://schema.org/Organization"
+                    }
+                  },
+                  "authorIdentifierScheme": {
+                    "typeName": "authorIdentifierScheme",
+                    "multiple": false,
+                    "typeClass": "controlledVocabulary",
+                    "value": "ORCID"
+                  },
+                  "authorIdentifier": {
+                    "typeName": "authorIdentifier",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "0000-0002-2950-1517"
+                  }
+                },
+                {
+                  "authorName": {
+                    "typeName": "authorName",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Fichter, Walter"
+                  },
+                  "authorAffiliation": {
+                    "typeName": "authorAffiliation",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "https://ror.org/04vnq7t77",
+                    "expandedvalue": {
+                      "scheme": "http://www.grid.ac/ontology/",
+                      "termName": "University of Stuttgart",
+                      "@type": "https://schema.org/Organization"
+                    }
+                  },
+                  "authorIdentifierScheme": {
+                    "typeName": "authorIdentifierScheme",
+                    "multiple": false,
+                    "typeClass": "controlledVocabulary",
+                    "value": "ORCID"
+                  },
+                  "authorIdentifier": {
+                    "typeName": "authorIdentifier",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "0000-0002-3688-3250"
+                  }
+                },
+                {
+                  "authorName": {
+                    "typeName": "authorName",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Cunis, Torbj\u00f8rn"
+                  },
+                  "authorAffiliation": {
+                    "typeName": "authorAffiliation",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "https://ror.org/04vnq7t77",
+                    "expandedvalue": {
+                      "scheme": "http://www.grid.ac/ontology/",
+                      "termName": "University of Stuttgart",
+                      "@type": "https://schema.org/Organization"
+                    }
+                  },
+                  "authorIdentifier": {
+                    "typeName": "authorIdentifier",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "0000-0003-1672-4321"
+                  }
+                }
+              ]
+            },
+            {
+              "typeName": "datasetContact",
+              "multiple": true,
+              "typeClass": "compound",
+              "value": [
+                {
+                  "datasetContactName": {
+                    "typeName": "datasetContactName",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Geyer, Fabian"
+                  },
+                  "datasetContactAffiliation": {
+                    "typeName": "datasetContactAffiliation",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "University of Stuttgart"
+                  }
+                },
+                {
+                  "datasetContactName": {
+                    "typeName": "datasetContactName",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Geyer, Fabian"
+                  },
+                  "datasetContactAffiliation": {
+                    "typeName": "datasetContactAffiliation",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Private"
+                  }
+                }
+              ]
+            },
+            {
+              "typeName": "dsDescription",
+              "multiple": true,
+              "typeClass": "compound",
+              "value": [
+                {
+                  "dsDescriptionValue": {
+                    "typeName": "dsDescriptionValue",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "<p>This repository contains the supplementary MATLAB code for the paper <i>\"Sum-of-Squares Stability Verification on Manifolds with Applications in Spacecraft Attitude Control,\"</i> accepted for presentation at the European Control Conference (ECC) 2026 (an extended version is available at <a href=\"https://arxiv.org/abs/2604.13727\" target=\"_blank\">arXiv:2604.13727</a>).</p>\n\n<br>\n\n<h3>Requirements and Setup</h3>\n<p>Clean dependency management is seamlessly handled through Git Submodules and MATLAB Project settings. The necessary setup components are contained within the <code>external_dependencies</code> and <code>resources</code> folders.</p>\n\n<br>\n\n<h3>Implementation Details</h3>\n<ul>\n  <li><b>Core Implementations:</b> Located in the <code>scripts</code> folder. This directory contains the example scripts used to obtain Lyapunov functions via Sum-of-Squares Optimization. These scripts can also serve as blueprints for solving similar control verification problems.</li>\n  <li><b>Aerodynamic Toolbox:</b> The <code>+saero</code> directory houses an object-oriented toolbox for computing aerodynamic torque for Very Low Earth Orbit (VLEO) satellites, specifically employed in the first example.</li>\n</ul>\n\n<br>\n\n<h3>Running the Examples</h3>\n<p>To get started with reproducing the two example problems outlined in the paper, please follow these steps:</p>\n<ol>\n  <li>Consult the <code>README.md</code> file for initial setup and execution guidelines.</li>\n  <li>Navigate to the <code>scripts</code> folder to execute the primary verification scripts.</li>\n</ol>\n\n<p>For more details on the code structure, you can also visit the corresponding <a href=\"https://github.com/iFR-OFC/SOS-Verify-Manifold-Spacecraft/tree/main\" target=\"_blank\">GitHub Repository</a>.</p>"
+                  },
+                  "dsDescriptionDate": {
+                    "typeName": "dsDescriptionDate",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "2026-04-10"
+                  }
+                }
+              ]
+            },
+            {
+              "typeName": "subject",
+              "multiple": true,
+              "typeClass": "controlledVocabulary",
+              "value": [
+                "Engineering",
+                "Mathematical Sciences"
+              ]
+            },
+            {
+              "typeName": "keyword",
+              "multiple": true,
+              "typeClass": "compound",
+              "value": [
+                {
+                  "keywordValue": {
+                    "typeName": "keywordValue",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Nonlinear Systems"
+                  },
+                  "keywordTermURI": {
+                    "typeName": "keywordTermURI",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "http://www.wikidata.org/entity/Q660848"
+                  },
+                  "keywordVocabulary": {
+                    "typeName": "keywordVocabulary",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Wikidata"
+                  }
+                },
+                {
+                  "keywordValue": {
+                    "typeName": "keywordValue",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Attitude Control"
+                  },
+                  "keywordTermURI": {
+                    "typeName": "keywordTermURI",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "http://www.wikidata.org/entity/Q83001"
+                  },
+                  "keywordVocabulary": {
+                    "typeName": "keywordVocabulary",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Wikidata"
+                  }
+                },
+                {
+                  "keywordValue": {
+                    "typeName": "keywordValue",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Optimization"
+                  }
+                },
+                {
+                  "keywordValue": {
+                    "typeName": "keywordValue",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Very Low Earth Orbit"
+                  },
+                  "keywordTermURI": {
+                    "typeName": "keywordTermURI",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "http://www.wikidata.org/entity/Q118905801"
+                  },
+                  "keywordVocabulary": {
+                    "typeName": "keywordVocabulary",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Wikidata"
+                  }
+                }
+              ]
+            },
+            {
+              "typeName": "topicClassification",
+              "multiple": true,
+              "typeClass": "compound",
+              "value": [
+                {
+                  "topicClassValue": {
+                    "typeName": "topicClassValue",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Automation, Mechatronics, Control Systems, Intelligent Technical Systems, Robotics"
+                  },
+                  "topicClassVocab": {
+                    "typeName": "topicClassVocab",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "DFGFO"
+                  },
+                  "topicClassVocabURI": {
+                    "typeName": "topicClassVocabURI",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "https://w3id.org/dfgfo/2024/441-01"
+                  }
+                }
+              ]
+            },
+            {
+              "typeName": "publication",
+              "multiple": true,
+              "typeClass": "compound",
+              "value": [
+                {
+                  "publicationRelationType": {
+                    "typeName": "publicationRelationType",
+                    "multiple": false,
+                    "typeClass": "controlledVocabulary",
+                    "value": "IsSupplementTo"
+                  },
+                  "publicationCitation": {
+                    "typeName": "publicationCitation",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Fabian Geyer, Friedrich Tuttas, Walter Fichter, Torbj\u00f8rn Cunis (2026). \"Sum-of-Squares Stability Verification on Manifolds with Applications in Spacecraft Attitude Control\""
+                  },
+                  "publicationIDType": {
+                    "typeName": "publicationIDType",
+                    "multiple": false,
+                    "typeClass": "controlledVocabulary",
+                    "value": "arXiv"
+                  },
+                  "publicationIDNumber": {
+                    "typeName": "publicationIDNumber",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "2604.13727"
+                  },
+                  "publicationURL": {
+                    "typeName": "publicationURL",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "https://arxiv.org/abs/2604.13727"
+                  }
+                }
+              ]
+            },
+            {
+              "typeName": "grantNumber",
+              "multiple": true,
+              "typeClass": "compound",
+              "value": [
+                {
+                  "grantNumberAgency": {
+                    "typeName": "grantNumberAgency",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "DFG"
+                  },
+                  "grantNumberValue": {
+                    "typeName": "grantNumberValue",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "516238647 - SFB 1667"
+                  }
+                }
+              ]
+            },
+            {
+              "typeName": "depositor",
+              "multiple": false,
+              "typeClass": "primitive",
+              "value": "Geyer, Fabian"
+            },
+            {
+              "typeName": "dateOfDeposit",
+              "multiple": false,
+              "typeClass": "primitive",
+              "value": "2025-11-10"
+            }
+          ]
+        },
+        "process": {
+          "displayName": "Process Metadata",
+          "name": "process",
+          "fields": []
+        },
+        "EngMeta": {
+          "displayName": "Engineering Metadata",
+          "name": "EngMeta",
+          "fields": [
+            {
+              "typeName": "engMetaMode",
+              "multiple": true,
+              "typeClass": "controlledVocabulary",
+              "value": [
+                "Simulation",
+                "Analysis"
+              ]
+            }
+          ]
+        },
+        "codeMeta20": {
+          "displayName": "Software Metadata (CodeMeta v2.0)",
+          "name": "codeMeta20",
+          "fields": [
+            {
+              "typeName": "codeRepository",
+              "multiple": true,
+              "typeClass": "primitive",
+              "value": [
+                "https://github.com/iFR-ACSO/SOS-Verify-Manifold-Spacecraft.git"
+              ]
+            },
+            {
+              "typeName": "applicationCategory",
+              "multiple": true,
+              "typeClass": "primitive",
+              "value": [
+                "Simulation; Analysis"
+              ]
+            },
+            {
+              "typeName": "programmingLanguage",
+              "multiple": true,
+              "typeClass": "primitive",
+              "value": [
+                "MATLAB"
+              ]
+            },
+            {
+              "typeName": "softwareRequirementsItem",
+              "multiple": true,
+              "typeClass": "compound",
+              "value": [
+                {
+                  "softwareRequirements": {
+                    "typeName": "softwareRequirements",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "CasADi 3.6"
+                  },
+                  "softwareRequirementsInfoUrl": {
+                    "typeName": "softwareRequirementsInfoUrl",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "https://web.casadi.org/"
+                  },
+                  "softwareRequirementsUrl": {
+                    "typeName": "softwareRequirementsUrl",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "https://web.casadi.org/get/"
+                  }
+                },
+                {
+                  "softwareRequirements": {
+                    "typeName": "softwareRequirements",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Matlab Symbolic Math Toolbox"
+                  },
+                  "softwareRequirementsInfoUrl": {
+                    "typeName": "softwareRequirementsInfoUrl",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "https://de.mathworks.com/products/symbolic.html"
+                  }
+                },
+                {
+                  "softwareRequirements": {
+                    "typeName": "softwareRequirements",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Matlab Aerospace Toolbox"
+                  },
+                  "softwareRequirementsInfoUrl": {
+                    "typeName": "softwareRequirementsInfoUrl",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "https://de.mathworks.com/products/aerospace-toolbox.html"
+                  }
+                },
+                {
+                  "softwareRequirements": {
+                    "typeName": "softwareRequirements",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "Mosek 11 (older versions could work aswell)"
+                  },
+                  "softwareRequirementsInfoUrl": {
+                    "typeName": "softwareRequirementsInfoUrl",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "https://docs.mosek.com/11.0/install/index.html"
+                  },
+                  "softwareRequirementsUrl": {
+                    "typeName": "softwareRequirementsUrl",
+                    "multiple": false,
+                    "typeClass": "primitive",
+                    "value": "https://docs.mosek.com/11.0/install/installation.html"
+                  }
+                }
+              ]
+            },
+            {
+              "typeName": "readme",
+              "multiple": false,
+              "typeClass": "primitive",
+              "value": "https://github.com/iFR-OFC/SOS-Verify-Manifold-Spacecraft/blob/main/README.md"
+            }
+          ]
+        }
+      },
+      "files": [
+        {
+          "description": "Source Code to run example 1 and 2. Repository: github.com/iFR-OFC/SOS-Verify-Manifold-Spacecraft",
+          "label": "SOS-Verify-Manifold-Spacecraft.zip",
+          "restricted": false,
+          "version": 3,
+          "datasetVersionId": 7503,
+          "dataFile": {
+            "id": 499457,
+            "persistentId": "",
+            "filename": "SOS-Verify-Manifold-Spacecraft.zip",
+            "contentType": "application/zip",
+            "friendlyType": "ZIP Archive",
+            "filesize": 345945,
+            "description": "Source Code to run example 1 and 2. Repository: github.com/iFR-OFC/SOS-Verify-Manifold-Spacecraft",
+            "storageIdentifier": "s3://fokus-dv-prod-1:19d72e197c4-142f18a55526",
+            "rootDataFileId": -1,
+            "md5": "343f0c3d6667473a8b9393176597708e",
+            "checksum": {
+              "type": "MD5",
+              "value": "343f0c3d6667473a8b9393176597708e"
+            },
+            "tabularData": false,
+            "creationDate": "2026-04-09",
+            "publicationDate": "2026-04-21",
+            "lastUpdateTime": "2026-04-21T08:07:03Z",
+            "fileAccessRequest": true
+          }
+        }
+      ]
+    }
+  }
+}

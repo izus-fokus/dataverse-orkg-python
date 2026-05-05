@@ -1,0 +1,45 @@
+{
+  "@context": {
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "label": "rdfs:label",
+    "description": "https://sandbox.orkg.org/predicate/description",
+    "identifier": "https://sandbox.orkg.org/predicate/P189149",
+    "datePublished": "https://sandbox.orkg.org/predicate/P189156",
+    "keywords": "https://sandbox.orkg.org/predicate/P189151",
+    "author": "https://sandbox.orkg.org/predicate/P189161",
+    "citation": "https://sandbox.orkg.org/predicate/P45087"
+  },
+  "@id": "https://sandbox.orkg.org/resource/R2164143",
+  "@type": [
+    "Dataset"
+  ],
+  "label": "DaRUS Climate Data 2028",
+  "description": {
+    "@value": "Temperature measurements from Stuttgart region"
+  },
+  "identifier": {
+    "@value": "doi:10.18419/darus-3567"
+  },
+  "datePublished": {
+    "@value": "2024-03-01"
+  },
+  "keywords": [
+    {
+      "@value": "climate"
+    },
+    {
+      "@value": "temperature"
+    },
+    {
+      "@value": "Stuttgart"
+    }
+  ],
+  "author": {
+    "@id": "https://sandbox.orkg.org/resource/R2164144",
+    "label": "Florian Frederick Fritze"
+  },
+  "citation": {
+    "@id": "https://sandbox.orkg.org/resource/R2159171",
+    "label": "Supplementary Data for Paper \"Laser-plume interactions in deep-penetration remote laser welding of stainless steel\""
+  }
+}
