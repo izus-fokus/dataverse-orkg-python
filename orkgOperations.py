@@ -3,25 +3,23 @@ import json
 import sys
 import requests
 from orkg import ORKG
-# Predicate IDs from the DaRUS→ORKG field mapping (mapping-files/darus-self.orkg.csv)
-# DATASET_PREDICATES = {
-#     "datePublished": "P186072",
-#     "author": "P186069",
-#     "description": "P14",
-#     "citation": "P45087",
-#     "funding": "P49051",
-#     "keywords": "P186076",
-#     "Producer": "P45077",
-#     "measurementMethod": "P188083",
-#     "contributor": "P49016",
-#     "identifier": "P186081",
-#     "dateCreated": "P186079",
-# }
 DATASET_PREDICATES = {}
 with open('mapping-files/darus-orkg.csv', newline='') as csvfile:
     csvreader = csv.reader(csvfile, delimiter=',')
     for row in csvreader:
         DATASET_PREDICATES[row[3]] = row[4]
+
+DATASET_TYPE_PREDICATES = {}
+with open('mapping-files/darus-orkg.csv', newline='') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=',')
+    for row in csvreader:
+        DATASET_TYPE_PREDICATES[row[3]] = row[5]
+
+DATASET_PREDICATES_SUBFIELDS = {}
+with open('mapping-files/darus-orkg.csv', newline='') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=',')
+    for row in csvreader:
+        DATASET_PREDICATES_SUBFIELDS[row[3]] = row[6]
 
 class OrkgOperations:
 
@@ -255,25 +253,46 @@ class OrkgOperations:
         year = date_parts[0][0] if date_parts and date_parts[0] else None
         month = date_parts[0][1] if date_parts and len(date_parts[0]) > 1 else None
 
-        paper_payload: dict = {
-            "paper": {
-                "title": title,
-                "doi": doi_bare,
-                "authors": authors,
-                "researchField": research_field,
-                "contributions": [],
-            }
-        }
-        if year:
-            paper_payload["paper"]["publicationYear"] = year
-        if month:
-            paper_payload["paper"]["publicationMonth"] = month
         publisher = meta.get("publisher")
-        if publisher:
-            paper_payload["paper"]["publishedIn"] = publisher
+        publication_info: dict = {
+            "published_year": year,
+            "published_month": month,
+            "published_in": publisher,
+            "url": None,
+        }
 
-        response = self.orkg.papers.add(paper_payload)
+        v2_authors = [{"name": a["label"]} for a in authors]
+
+        response = self.orkg.papers.add_v2(
+            title=title,
+            research_fields=[research_field],
+            identifiers={"doi": [doi_bare]},
+            publication_info=publication_info,
+            authors=v2_authors,
+            contents={"contributions": [], "resources": {}, "literals": {}, "predicates": {}, "lists": {}},
+            organizations=[],
+            observatories=[],
+            extraction_method="AUTOMATIC",
+        )
         if not response.succeeded:
+            raw = response.content or {}
+            if isinstance(raw, (bytes, bytearray)):
+                try:
+                    import json
+                    raw = json.loads(raw.decode("utf-8"))
+                except Exception:
+                    raw = {}
+            content = raw if isinstance(raw, dict) else {}
+            if content.get("type") == "orkg:problem:paper_already_exists":
+                lookup = self.orkg.papers.by_doi(doi_bare)
+                if lookup.succeeded:
+                    papers = lookup.content
+                    if isinstance(papers, dict) and "content" in papers:
+                        papers = papers["content"]
+                    if papers:
+                        paper_id = papers[0].get("id")
+                        print(f"Paper already exists: {paper_id}  (DOI: {doi_bare})")
+                        return paper_id
             print(f"Failed to create ORKG paper for DOI {doi_bare}: {response.content}", file=sys.stderr)
             return None
 
@@ -306,18 +325,18 @@ class OrkgOperations:
         Create a dataset resource in ORKG from a JSON object and attach metadata statements.
 
         Expected keys:
-          title               (required) human-readable dataset name
-          description         (optional) free-text description
-          identifier          (optional) persistent identifier / DOI
-          publication_date    (optional) date the dataset was published (YYYY-MM-DD)
-          deposit_date        (optional) date the dataset was deposited
-          keywords            (optional) list of keyword strings
-          authors             (optional) list of {"name": str} dicts
-          funding             (optional) list of {"agency": str} dicts
-          producers           (optional) list of producer name strings
-          measurement_methods (optional) list of method/process description strings
-          contributors        (optional) list of {"name": str} dicts
-          citations           (optional) list of {"citation": str, "url": str, "id_type": str, "id_number": str}
+          title                (required) human-readable dataset name
+          description          (optional) free-text description
+          identifier           (optional) persistent identifier / DOI
+          datePublished        (optional) date the dataset was published (YYYY-MM-DD)
+          dateCreated          (optional) date the dataset was deposited
+          keywords             (optional) list of keyword strings
+          author               (optional) list of {"name": str} dicts
+          funding              (optional) list of {"agency": str} dicts
+          Producer             (optional) list of producer name strings
+          measurementMethod    (optional) list of method/process description strings
+          contributor          (optional) list of {"name": str} dicts
+          citation             (optional) list of {"citation": str, "url": str, "id_type": str, "id_number": str}
           related_publication  (optional) ORKG resource ID of a single linked paper (e.g. "R123456")
           related_publications (optional) list of ORKG resource IDs of linked papers
 
@@ -336,76 +355,80 @@ class OrkgOperations:
         dataset_id = response.content["id"]
         print(f"Created dataset resource: {dataset_id}")
 
-        # Scalar text fields → literals
-        for field, predicate in [
-            ("description",      DATASET_PREDICATES["description"]),
-            ("identifier",       DATASET_PREDICATES["identifier"]),
-            ("publication_date", DATASET_PREDICATES["datePublished"]),
-            ("deposit_date",     DATASET_PREDICATES["dateCreated"]),
-        ]:
-            value = dataset.get(field)
-            if value:
-                if len(str(value)) > 8164:
-                    value = str(value)[:8160] + "..."
-                    lit_id = self._add_literal(str(value))
-                    if lit_id:
-                        self._add_statement(dataset_id, predicate, lit_id)
-                else:
-                    lit_id = self._add_literal(str(value))
-                    if lit_id:
-                        self._add_statement(dataset_id, predicate, lit_id)
+        for field in dataset.keys():
+            if DATASET_TYPE_PREDICATES.get(field) == "literal":
+                if DATASET_PREDICATES[field] == "SAME_AS":
+                    continue
+                value = dataset.get(field)
+                if isinstance(value, list):
+                    for item in value:
+                        if item:
+                            if len(str(item)) > 8164:
+                                item = str(item)[:8160] + "..."
+                                lit_id = self._add_literal(str(item))
+                                if lit_id:
+                                    self._add_statement(dataset_id, DATASET_PREDICATES[field], lit_id)
+                            else:
+                                lit_id = self._add_literal(str(item))
+                                if lit_id:
+                                    self._add_statement(dataset_id, DATASET_PREDICATES[field], lit_id)
+                elif isinstance(value, str):
+                    if value:
+                        if len(str(value)) > 8164:
+                            value = str(value)[:8160] + "..."
+                            lit_id = self._add_literal(str(value))
+                            if lit_id:
+                                self._add_statement(dataset_id, DATASET_PREDICATES[field], lit_id)
+                        else:
+                            lit_id = self._add_literal(str(value))
+                            if lit_id:
+                                self._add_statement(dataset_id, DATASET_PREDICATES[field], lit_id)
+            elif DATASET_TYPE_PREDICATES.get(field) == "resource":
+                for value in dataset.get(field, []):
+                    if isinstance(value, list):
+                        for item in value:
+                            if not item:
+                                continue
+                            value_resp = self.orkg.resources.add(label=item)
+                            if value_resp.succeeded:
+                                self._add_statement(dataset_id, DATASET_PREDICATES[field], value_resp.content["id"])
+                                subfields = [
+                                    subfield
+                                    for subfield in DATASET_PREDICATES_SUBFIELDS.get(field).split(",")
+                                    if DATASET_PREDICATES_SUBFIELDS.get(field, "") is not None
+                                ]
+                                if "SAME_AS" in subfields:
+                                    same_as = dataset.get(field+".SAME_AS", [])
+                                    for subitem in same_as:
+                                        subvalue = subitem.get(item)
+                                        if not subvalue:
+                                            continue
+                                        lit_id_subvalue = self._add_literal(str(subvalue))
+                                        if lit_id_subvalue:
+                                            self._add_statement(value_resp.content["id"], "SAME_AS", lit_id_subvalue)
+                    elif isinstance(value, str):
+                        if not value:
+                            continue
+                        value_resp = self.orkg.resources.add(label=value)
+                        if value_resp.succeeded:
+                            self._add_statement(dataset_id, DATASET_PREDICATES[field], value_resp.content["id"])
+                            subfields = [subfield
+                                         for subfield in DATASET_PREDICATES_SUBFIELDS.get(field).split(",")
+                                         if DATASET_PREDICATES_SUBFIELDS.get(field, "") is not None
+                            ]
+                            if "SAME_AS" in subfields:
+                                same_as = dataset.get(field + ".SAME_AS", [])
+                                for subitem in same_as:
+                                    subvalue = subitem.get(value)
+                                    if not subvalue:
+                                        continue
+                                    lit_id_subvalue = self._add_literal(str(subvalue))
+                                    if lit_id_subvalue:
+                                        self._add_statement(value_resp.content["id"], "SAME_AS", lit_id_subvalue)
 
-        # Keywords → one literal per keyword
-        for keyword in dataset.get("keywords", []):
-            lit_id = self._add_literal(keyword)
-            if lit_id:
-                self._add_statement(dataset_id, DATASET_PREDICATES["keywords"], lit_id)
-
-        # Measurement methods → one literal per method
-        for method in dataset.get("measurement_methods", []):
-            if not method.strip():
-                continue
-            lit_id = self._add_literal(method.strip())
-            if lit_id:
-                self._add_statement(dataset_id, DATASET_PREDICATES["measurementMethod"], lit_id)
-
-        # Authors → resource per author
-        for author in dataset.get("authors", []):
-            name = author.get("name", "").strip()
-            if not name:
-                continue
-            author_resp = self.orkg.resources.add(label=name)
-            if author_resp.succeeded:
-                self._add_statement(dataset_id, DATASET_PREDICATES["author"], author_resp.content["id"])
-
-        # Funding → resource per funder (label = agency name)
-        for funder in dataset.get("funding", []):
-            agency = funder.get("agency", "").strip()
-            if not agency:
-                continue
-            funder_resp = self.orkg.resources.add(label=agency)
-            if funder_resp.succeeded:
-                self._add_statement(dataset_id, DATASET_PREDICATES["funding"], funder_resp.content["id"])
-
-        # Producers → resource per producer
-        for producer in dataset.get("producers", []):
-            if not producer.strip():
-                continue
-            producer_resp = self.orkg.resources.add(label=producer.strip())
-            if producer_resp.succeeded:
-                self._add_statement(dataset_id, DATASET_PREDICATES["Producer"], producer_resp.content["id"])
-
-        # Contributors → resource per contributor
-        for contributor in dataset.get("contributors", []):
-            name = contributor.get("name", "").strip()
-            if not name:
-                continue
-            contributor_resp = self.orkg.resources.add(label=name)
-            if contributor_resp.succeeded:
-                self._add_statement(dataset_id, DATASET_PREDICATES["contributor"], contributor_resp.content["id"])
 
         # Citations → one Paper resource per entry
-        for cite in dataset.get("citations", []):
+        for cite in dataset.get("citation", []):
             citation_text = cite.get("citation", "").strip()
             if not citation_text:
                 continue

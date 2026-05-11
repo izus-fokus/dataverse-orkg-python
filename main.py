@@ -1,3 +1,4 @@
+import csv
 import json
 import os
 import re
@@ -6,6 +7,39 @@ from orkg.common import Hosts
 from orkgOperations import OrkgOperations
 from dataverseOperations import DataverseOperations
 
+DATAVERSE_PROPERTIES = {}
+with open('mapping-files/darus-orkg.csv', newline='') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=',')
+    next(csvreader)
+    DATAVERSE_PROPERTIES = {
+        row[0].strip():row[2].strip()
+        for row in csvreader
+    }
+DATAVERSE_DATATYPE = {}
+with open('mapping-files/darus-orkg.csv', newline='') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=',')
+    next(csvreader)
+    DATAVERSE_DATATYPE = {
+        row[0].strip():row[1].strip()
+        for row in csvreader
+    }
+DATAVERSE_PROPERTY_KEYS = []
+with open('mapping-files/darus-orkg.csv', newline='') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=',')
+    next(csvreader)
+    DATAVERSE_PROPERTY_KEYS = [
+        row[0].strip()
+        for row in csvreader
+    ]
+
+DATAVERSE_PROPERTY_MAPPING = {}
+with open('mapping-files/darus-orkg.csv', newline='') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=',')
+    next(csvreader)
+    DATAVERSE_PROPERTY_MAPPING = {
+        row[0].strip():row[3].strip()
+        for row in csvreader
+    }
 
 def strip_html(text: str) -> str:
     class _Stripper(HTMLParser):
@@ -107,53 +141,89 @@ def add_dataset(client, dataverse, dvDOI, publication):
 
     title = fields.get("title", "")
 
-    descriptions = [
-        item["dsDescriptionValue"]["value"]
-        for item in fields.get("dsDescription", [])
-        if item.get("dsDescriptionValue", {}).get("value")
-    ]
-    description = "\n".join(strip_html(d) for d in descriptions)
+    DATAVERSE = []
+    for propertyKey in DATAVERSE_PROPERTY_KEYS:
+        for item in fields.get(propertyKey, []):
+            propertyKey = propertyKey.strip()
+            DATAVERSE.append({propertyKey:item})
 
-    authors = [
-        {"name": item["authorName"]["value"].strip()}
-        for item in fields.get("author", [])
-        if item.get("authorName", {}).get("value", "").strip()
-    ]
+    DATAVERSE_BLOCKS = []
+    for key, value in DATAVERSE_PROPERTIES.items():
+        values = []
+        if DATAVERSE_DATATYPE.get(key) == "value":
+            for item in DATAVERSE:
+                if item.get(key):
+                    if value == "dsDescriptionValue":
+                        description = item.get(key,{}).get(value,{}).get("value", "")
+                        description = strip_html(description)
+                        values.append(description)
+                    else:
+                        values.append(item.get(key,{}).get(value,{}).get("value", ""))
+            DATAVERSE_BLOCKS.append({key: values})
 
-    keywords = [
-        item["keywordValue"]["value"].strip()
-        for item in fields.get("keyword", [])
-        if item.get("keywordValue", {}).get("value", "").strip()
-    ]
+    subkey = None
+    parentValues = []
+    subValues = []
+    oldKey = None
+    for key, value in DATAVERSE_PROPERTIES.items():
+        values = []
+        if DATAVERSE_DATATYPE.get(key) == "withsubvalue":
+            for item in DATAVERSE:
+                parentValue = item.get(key, {}).get(value, {}).get("value", "")
+                if parentValue:
+                    subkey = DATAVERSE_PROPERTIES.get(key)
+                    parentValues.append(parentValue)
+                    oldKey = key
+            DATAVERSE_BLOCKS.append({key: parentValues})
+        if DATAVERSE_DATATYPE.get(key) == subkey:
+            for item in DATAVERSE:
+                subValue = item.get(oldKey, {}).get(value, {}).get("value", "")
+                if subValue:
+                    if key == DATAVERSE_PROPERTIES.get(key):
+                        subValues.append(subValue)
+            counter = 0
+            for parentValue in parentValues:
+                values.append({parentValue: subValues[counter]})
+                counter+=1
+            DATAVERSE_BLOCKS.append({value: values})
+            subkey = None
+            parentValues = []
+            subValues = []
 
-    funding = [
-        {"agency": item["grantNumberAgency"]["value"].strip()}
-        for item in fields.get("grantNumber", [])
-        if item.get("grantNumberAgency", {}).get("value", "").strip()
-    ]
+    for key, value in DATAVERSE_PROPERTIES.items():
+        values = []
+        if DATAVERSE_DATATYPE.get(key) == "value":
+            for item in DATAVERSE:
+                if item.get(key):
+                    if value == "dsDescriptionValue":
+                        description = item.get(key,{}).get(value,{}).get("value", "")
+                        description = strip_html(description)
+                        values.append(description)
+                    else:
+                        values.append(item.get(key,{}).get(value,{}).get("value", ""))
+            DATAVERSE_BLOCKS.append({key: values})
 
-    producers = [
-        item["producerName"]["value"].strip()
-        for item in fields.get("producer", [])
-        if item.get("producerName", {}).get("value", "").strip()
-    ]
+    for key, value in DATAVERSE_PROPERTIES.items():
+        values = []
+        if DATAVERSE_DATATYPE.get(key) == "oneortwo":
+            for item in DATAVERSE:
+                if item.get(key):
+                    subfields = [subfield
+                        for subfield in DATAVERSE_PROPERTIES.get(key).split(",")
+                        if DATAVERSE_PROPERTIES.get(key, "") is not None
+                    ]
+                    compound = item.get(key, {})
+                    fieldone = compound.get(subfields[0], {}).get("value", "").strip()
+                    fieltwo = compound.get(subfields[1], {}).get("value", "").strip()
+                    if fieldone:
+                        values.append(f"{fieldone}: {fieltwo}" if fieltwo else fieldone)
+            DATAVERSE_BLOCKS.append({key: values})
 
-    methods = []
-    for item in fields.get("processMethods", []):
-        name = item.get("processMethodsName", {}).get("value", "").strip()
-        desc = item.get("processMethodsDescription", {}).get("value", "").strip()
-        if name:
-            methods.append(f"{name}: {desc}" if desc else name)
-
-    contributors = [
-        {"name": item["contributorName"]["value"].strip()}
-        for item in fields.get("contributor", [])
-        if item.get("contributorName", {}).get("value", "").strip()
-    ]
-
-    publication_date = data.get("publicationDate", "")
-    deposit_date = fields.get("dateOfDeposit", "")
-    identifier = data.get("persistentUrl", dvDOI)
+    for key, value in DATAVERSE_DATATYPE.items():
+        if DATAVERSE_DATATYPE.get(key) == "data":
+            DATAVERSE_BLOCKS.append({key: data.get(key)})
+        if DATAVERSE_DATATYPE.get(key) == "fields":
+            DATAVERSE_BLOCKS.append({key: fields.get(key)})
 
     citations = []
     if publication is None:
@@ -171,34 +241,33 @@ def add_dataset(client, dataverse, dvDOI, publication):
                     related_publications.append(paper_id)
                     continue
             citations.append({"citation": citation_text, "url": url, "id_type": id_type, "id_number": id_number})
-        client.add_dataset({
-            "title": title,
-            "description": description,
-            "identifier": identifier,
-            "publication_date": publication_date,
-            "deposit_date": deposit_date,
-            "keywords": keywords,
-            "authors": authors,
-            "funding": funding,
-            "producers": producers,
-            "measurement_methods": methods,
-            "contributors": contributors,
-            "citations": citations,
-            "related_publications": related_publications,
-        })
+
+        PUBLISH = {}
+
+        for metadata in DATAVERSE_BLOCKS:
+            for key, value in DATAVERSE_PROPERTY_MAPPING.items():
+                if metadata.get(key):
+                    PUBLISH[DATAVERSE_PROPERTY_MAPPING.get(key)] = metadata.get(key)
+                    PUBLISH["title"] = title
+                    PUBLISH["citation"] = citations
+                    PUBLISH["related_publications"] = related_publications
+        client.add_dataset(PUBLISH)
     else:
-        client.add_dataset(
-            {"title": title, "description": description, "identifier": identifier, "publication_date": publication_date,
-             "deposit_date": deposit_date, "keywords": keywords, "authors": authors, "funding": funding,
-             "producers": producers, "measurement_methods": methods, "contributors": contributors,
-             "related_publication": publication, })
+        PUBLISH = {}
+        for metadata in DATAVERSE_BLOCKS:
+            for key, value in DATAVERSE_PROPERTY_MAPPING.items():
+                if metadata.get(key):
+                    PUBLISH[DATAVERSE_PROPERTY_MAPPING.get(key)] = metadata.get(key)
+                    PUBLISH["title"] = title
+                    PUBLISH["related_publication"] = publication
+        client.add_dataset(PUBLISH)
 
 def main():
     client = OrkgOperations(mail, pw, Hosts.SANDBOX)
 
     dataverse = DataverseOperations(dataverseUrl)
 
-    add_dataset(client,dataverse,"doi:10.18419/DARUS-4620",None)
+    add_dataset(client,dataverse,"doi:10.18419/DARUS-4538",None)
 
     # print_orkg_datasets(client)
 
