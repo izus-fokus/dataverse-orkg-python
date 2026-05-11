@@ -178,9 +178,14 @@ def add_dataset(client, dataverse, dvDOI, publication):
         if DATAVERSE_DATATYPE.get(key) == subkey:
             for item in DATAVERSE:
                 subValue = item.get(oldKey, {}).get(value, {}).get("value", "")
+                if item.get(oldKey, {}).get(DATAVERSE_DATATYPE.get(key), {}).get("value", "") and not subValue:
+                    subValues.append("")
                 if subValue:
                     if key == DATAVERSE_PROPERTIES.get(key):
-                        subValues.append(subValue)
+                        if item.get(oldKey, {}).get(value, {}).get("value", ""):
+                            if item.get(oldKey, {}).get(DATAVERSE_DATATYPE.get(key), {}).get("value", ""):
+                                subValues.append(subValue)
+
             counter = 0
             for parentValue in parentValues:
                 values.append({parentValue: subValues[counter]})
@@ -267,7 +272,7 @@ def main():
 
     dataverse = DataverseOperations(dataverseUrl)
 
-    add_dataset(client,dataverse,"doi:10.18419/DARUS-4538",None)
+    add_dataset(client,dataverse,"doi:10.18419/DARUS-5626",None)
 
     # print_orkg_datasets(client)
 
