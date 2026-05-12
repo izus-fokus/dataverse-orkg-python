@@ -14,7 +14,7 @@ The mapping between Dataverse and ORKG fields is defined in `mapping-files/darus
 
 The `title` field is not in the mapping file; it is used directly as the ORKG dataset resource label.
 
-| Dataverse field | `darusDatatype` | Darus subfield | ORKG predicate | Predicate ID | ORKG type |
+| Dataverse field | `extractionStrategy` | Darus subfield | ORKG predicate | Predicate ID | ORKG type |
 |---|---|---|---|---|---|
 | `publicationDate` | `data` | — | `datePublished` | P186072 | literal |
 | `author` | `value` | `authorName` | `author` | P186069 | resource |
@@ -29,9 +29,9 @@ The `title` field is not in the mapping file; it is used directly as the ORKG da
 | `dateOfDeposit` | `fields` | — | `dateCreated` | P186079 | literal |
 | `persistentUrl` | `data` | — | `identifier` | P186081 | literal |
 
-### `darusDatatype` extraction strategies
+### `extractionStrategy` extraction strategies
 
-The `darusDatatype` column (column 2) controls how `main.py` extracts the value for each row from the Dataverse API response:
+The `extractionStrategy` column (column 2) controls how `main.py` extracts the value for each row from the Dataverse API response:
 
 | Value | Extraction behaviour |
 |---|---|
@@ -39,7 +39,7 @@ The `darusDatatype` column (column 2) controls how `main.py` extracts the value 
 | `fields` | Read directly from the citation `fields` dict (e.g. `fields["dateOfDeposit"]`). |
 | `value` | Compound field: iterate over all entries, extract the subfield named in the *Darus subfield* column and read its `.value`. HTML is stripped for `dsDescriptionValue`. |
 | `oneortwo` | Compound field with one or two subfields listed in the *Darus subfield* column. The first subfield is required; if a second is present it is appended as `"name: description"`. |
-| `withsubvalue` | Compound field whose primary value (the *Darus subfield*) is kept as the parent label, and whose URI is pulled from a paired sub-row whose `darusDatatype` equals the subfield name. Used for `keyword` ↔ `keywordTermURI` to build `{label: uri}` pairs for SAME_AS linking. |
+| `withsubvalue` | Compound field whose primary value (the *Darus subfield*) is kept as the parent label, and whose URI is pulled from a paired sub-row whose `extractionStrategy` equals the subfield name. Used for `keyword` ↔ `keywordTermURI` to build `{label: uri}` pairs for SAME_AS linking. |
 | `complex` | Handled entirely outside the generic loop (currently `publication`, resolved via Crossref). |
 
 ### Supporting mapping files

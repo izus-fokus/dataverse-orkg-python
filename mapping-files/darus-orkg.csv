@@ -1,4 +1,4 @@
-darus ,darusDatatype,subfields,orkgName,orkgId ,orkgDatatype,subfields
+darus ,extractionStrategy,subfields,orkgName,orkgId ,orkgDatatype,subfields
 publicationDate,data,,datePublished,P186072,literal,"same as, description"
 author,value,"authorName",author,P186069,resource,
 dsDescription,value,dsDescriptionValue,description,P14,literal,
