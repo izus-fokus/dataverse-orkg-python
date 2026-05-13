@@ -256,7 +256,7 @@ def add_dataset(client, dataverse, dvDOI, publication):
                     PUBLISH["title"] = title
                     PUBLISH["citation"] = citations
                     PUBLISH["related_publications"] = related_publications
-        client.add_dataset(PUBLISH)
+        return client.add_dataset(PUBLISH)
     else:
         PUBLISH = {}
         for metadata in DATAVERSE_BLOCKS:
@@ -265,14 +265,24 @@ def add_dataset(client, dataverse, dvDOI, publication):
                     PUBLISH[DATAVERSE_PROPERTY_MAPPING.get(key)] = metadata.get(key)
                     PUBLISH["title"] = title
                     PUBLISH["related_publication"] = publication
-        client.add_dataset(PUBLISH)
+        return client.add_dataset(PUBLISH)
 
 def main():
     client = OrkgOperations(mail, pw, Hosts.SANDBOX)
 
+    sandbox = True
+
     dataverse = DataverseOperations(dataverseUrl)
 
-    add_dataset(client,dataverse,"doi:10.18419/DARUS-5626",None)
+    # datasets = ["doi:10.18419/DARUS-5626","doi:10.18419/DARUS-4538"]
+
+    responseContent = add_dataset(client,dataverse,"doi:10.18419/DARUS-5626",None)
+
+    if sandbox:
+        with open("resources.txt", "w") as f:
+            if responseContent:
+                print("https://sandbox.orkg.org/resources/" + responseContent["id"])
+                f.write("https://sandbox.orkg.org/resources/" + responseContent["id"])
 
     # print_orkg_datasets(client)
 
